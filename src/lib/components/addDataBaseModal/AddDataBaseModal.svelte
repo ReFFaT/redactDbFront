@@ -1,10 +1,10 @@
 <script lang="ts">
-	import CloseModal from './../Modal/CloseModal.svelte';
+	import CloseModal from '../closeModal/CloseModal.svelte';
 	import { getDbList } from '$lib/store/dbList';
 	import { type createDbInterface,createDB } from '$lib/helper/fetcher';
 	import Button from "../Button.svelte";
     import Input from "../Input.svelte";
-    import "./adddatabase.scss"
+    import "./addDataBaseModal.scss"
 
     export let closeFunction =()=>{}
 
@@ -13,7 +13,7 @@
         table_description:""
     }
 
-    function changeDisabled(){
+    function changeDisabled(db:createDbInterface){
         if(db.user_table!== "" && db.table_description!== "") disabled = false
         else disabled = true
     }

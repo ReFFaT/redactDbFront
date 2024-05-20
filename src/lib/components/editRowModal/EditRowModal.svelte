@@ -1,0 +1,32 @@
+<script lang="ts">
+	import Button from '$lib/components/Button.svelte';
+	import Input from '$lib/components/Input.svelte';
+	import CloseModal from '$lib/components/closeModal/CloseModal.svelte';
+
+    import "./editRowModal.scss"
+    interface editRowInterface {
+        [key:string]:string
+    }
+	export let closeFunc = () => {};
+    export let editRowValues:editRowInterface = {}
+    let editRowElms = Object.keys(editRowValues)
+</script>
+
+<div class="edit-modal">
+	<CloseModal on:click={closeFunc}/>
+	<h4>Редактирование</h4>
+	<div class="edit-modal__items">
+		{#if editRowElms}
+			{#each editRowElms as field}
+				{#if field !== 'id'}
+					<div class="edit-modal__input">
+						<Input bind:value = {editRowValues[field]} title={field} placeHolder={field} />
+					</div>
+				{/if}
+			{/each}
+		{/if}
+	</div>
+	<div class="edit-modal__button">
+		<Button text="Редактировать" on:click/>
+	</div>
+</div>

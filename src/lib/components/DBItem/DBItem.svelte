@@ -6,7 +6,7 @@
 	import Button from "../Button.svelte";
     import "./dbItem.scss"
 	import { goto } from '$app/navigation';
-	import CloseModal from '../Modal/CloseModal.svelte';
+	import CloseModal from '../closeModal/CloseModal.svelte';
 
     export let dbName = "";
     export let dbTitle = ""; 

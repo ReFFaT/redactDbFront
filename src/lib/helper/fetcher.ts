@@ -83,3 +83,66 @@ export async function addTableItem(tableName:string, data:object){
         console.error(err)
     } 
 }
+
+
+
+export async function deleteTableColumn(tableName:string, columnName: string){
+    try{
+        const user = localStorage.getItem('user')
+        if(!user) location.reload()
+        const request  = await fetch(`http://127.0.0.1:5000/drop_columns/${user}/${tableName}`,{
+            method:"DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({"columns": [columnName]})
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+    }
+    catch(err){
+        console.error(err)
+    } 
+}
+
+
+export async function addTableColumn(tableName:string, columnName: string){
+    const newColumns = columnName.split(' ')
+    try{
+        const user = localStorage.getItem('user')
+        if(!user) location.reload()
+        const request  = await fetch(`http://127.0.0.1:5000/add_columns/${user}/${tableName}`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({"columns": newColumns})
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+    }
+    catch(err){
+        console.error(err)
+    } 
+}
+
+export async function editTableRow(tableName:string, rowValue:{[key:string]:string}){
+    const id = rowValue.id??-1
+    if(rowValue.id) delete rowValue.id
+    try{
+        const user = localStorage.getItem('user')
+        if(!user) location.reload()
+        const request  = await fetch(`http://127.0.0.1:5000/update_data/${user}/${tableName}/${id}`,{
+            method:"PUT",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify(rowValue)
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+    }
+    catch(err){
+        console.error(err)
+    } 
+}

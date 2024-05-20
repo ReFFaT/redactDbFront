@@ -1,4 +1,5 @@
 <script>
+// @ts-ignore
 import  CloseIcon  from '$lib/icons/close.svg?component';
 import './closeModal.scss'
 </script>

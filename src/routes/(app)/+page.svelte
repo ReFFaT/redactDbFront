@@ -3,7 +3,7 @@
     import AddIcon from "$lib/icons/add-icon.svg?component";
     import { scale } from "svelte/transition"
 	import Modal from '$lib/components/Modal/Modal.svelte';
-	import AddDataBase from '$lib/components/addDataBase/addDataBase.svelte';
+	import AddDataBaseModal from '$lib/components/addDataBaseModal/AddDataBaseModal.svelte';
 	import { table } from '$lib/store/table';
 	import { dbList } from '$lib/store/dbList';
 	import { formatName } from '$lib/helper/helper';
@@ -33,7 +33,7 @@
     </div>
 {#if addNewDB}
     <Modal closeFunction={()=>addNewDB=false}>
-        <AddDataBase closeFunction={()=>addNewDB=false}/>
+        <AddDataBaseModal closeFunction={()=>addNewDB=false}/>
     </Modal>
 {/if}
 

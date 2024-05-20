@@ -1,8 +1,7 @@
 <script>
-	import  CloseIcon  from '$lib/icons/close.svg?component';
 	import Button from '../Button.svelte';
-	import CloseModal from '../Modal/CloseModal.svelte';
-    import "./deleteitem.scss" 
+	import CloseModal from '../closeModal/CloseModal.svelte';
+    import "./deleteRowModal.scss" 
 
     export let closeModal = ()=>{}
     export let deleteFunc = ()=>{}

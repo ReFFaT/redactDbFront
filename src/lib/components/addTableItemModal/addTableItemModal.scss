@@ -1,0 +1,26 @@
+.add-modal{
+    position: relative;
+    max-width: 300px;
+    min-width: 250px;
+    min-height: 100px;
+    &__items{
+        max-height: 500px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        display: flex;
+        margin-top: 10px;
+        gap: 10px;
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    &__input{
+        width: 100%;
+        display: flex;
+        gap: 5px;
+        flex-direction: column;
+    }
+    &__button{
+        margin-top: 15px;
+    }
+}
