@@ -1,0 +1,25 @@
+.add-db{
+    position: relative;
+    min-width: 320px;
+    &__input{
+        margin-top: 15px;
+    }
+    &__button{
+        margin-top: 15px;
+    }
+    &__close{
+        position: absolute;
+        right: -15px;
+        top: -10px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: all .3s;
+        &:active{
+            transform: scale(.9);
+        }
+    }
+}
+.add-db__close-icon{
+    fill: var(--color-text);
+}

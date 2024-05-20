@@ -1,0 +1,15 @@
+.modal-close{
+    position: absolute;
+    right: -15px;
+    top: -10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all .3s;
+    &:active{
+        transform: scale(.9);
+    }
+    &-icon{
+        fill: var(--color-text);
+    }
+}
