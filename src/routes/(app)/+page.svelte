@@ -1,6 +1,7 @@
 <script lang="ts">
-	import DBItem from '$lib/components/DBItem/DBItem.svelte';
-    import AddIcon from "$lib/icons/add-icon.svg?component";
+	import AddIcon from "$lib/icons/add-icon.svg?component";
+
+    import DBItem from '$lib/components/DBItem/DBItem.svelte';
     import { scale } from "svelte/transition"
 	import Modal from '$lib/components/Modal/Modal.svelte';
 	import AddDataBaseModal from '$lib/components/addDataBaseModal/AddDataBaseModal.svelte';
@@ -9,9 +10,6 @@
 	import { formatName } from '$lib/helper/helper';
 	
     let addNewDB = false
-
-    $:console.log($table)
-    $:console.log($dbList)
 </script>
 
     <div class="database">

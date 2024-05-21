@@ -21,6 +21,7 @@
     
     import "$styles/table.scss"
 	import EditRowModal from "$lib/components/editRowModal/EditRowModal.svelte";
+	import Button from "$lib/components/Button.svelte";
 
     let targetTableName: string | null = null
     let targetTable: tableItem | null = null
@@ -42,7 +43,7 @@
     let editRowValues = {}
 
     function setTargetTable(){
-        if($table && targetTableName) {
+        if($table && targetTableName && $table[targetTableName]) {
             targetTable = JSON.parse(JSON.stringify($table[targetTableName]))
         }
     }
@@ -94,6 +95,7 @@
         userId = localStorage.getItem("user")
         if(!userId) goto("/login")
         targetTableName = sessionStorage.getItem("targetTable")
+        if(!targetTableName) goto('/') 
     })
 
     $:targetTableName && $table && setTargetTable()
@@ -101,7 +103,13 @@
 
 
 <div class="table">
-    <h1>Таблица {formatName(targetTableName?? "")}</h1>
+    <div class="table__title">
+        <h1>Таблица {formatName(targetTableName?? "")}</h1>
+        <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
+            sessionStorage.setItem("targetTable","")
+            goto('/')}}
+        />
+    </div>
     {#if targetTable}
         <table class="table__wrapper">
             <thead>

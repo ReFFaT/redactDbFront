@@ -1,7 +1,10 @@
 <script>
 	import { goto } from "$app/navigation";
+    // @ts-ignore
     import DbIcon from "$lib/icons/db-icon.svg?component"
+    // @ts-ignore
     import UserIcon from "$lib/icons/default-user.svg?component"
+    // @ts-ignore
     import Out from "$lib/icons/out.svg?component"
     import "./header.scss"
 

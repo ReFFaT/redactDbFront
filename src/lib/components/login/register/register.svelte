@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { type newUserInterface,createUser } from '$lib/store/user';
+	import { type newUserInterface,createUser } from '$lib/helper/fetcher';
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
     import "./register.scss"

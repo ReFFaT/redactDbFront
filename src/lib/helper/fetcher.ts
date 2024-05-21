@@ -2,6 +2,59 @@ export interface createDbInterface{
     user_table:string
     table_description:string
 }
+export interface newUserInterface {
+    login: string,
+    name:string,
+    pass:string,
+    repeatPass:string
+}
+
+export async function auth(login:string,password:string) {
+    try{
+        const request  = await fetch("http://reffattest.ru:5000/login",{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                "login":login,
+                "password":password
+            })
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+        localStorage.setItem("user",response.login)
+        location.reload()
+    }
+    catch(err){
+        console.error(err)
+    }
+}
+
+export async function createUser(newUser: newUserInterface){
+    if(newUser.repeatPass !== newUser.pass) return
+    try{
+        const request  = await fetch("http://reffattest.ru:5000/users",{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                "login":newUser.login,
+                "name":newUser.name,
+                "password":newUser.pass,
+                role:""
+            })
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+        localStorage.setItem("user",response.login)
+        location.reload()
+    }
+    catch(err){
+        console.error(err)
+    }
+}
 
 export async function createDB(db:createDbInterface) {
     try{

@@ -5,6 +5,7 @@
 	import Button from "../Button.svelte";
     import Input from "../Input.svelte";
     import "./addDataBaseModal.scss"
+	import { getTableList } from '$lib/store/table';
 
     export let closeFunction =()=>{}
 
@@ -42,6 +43,7 @@
             if(user) {
                 await createDB(db)
                 getDbList(user)
+                getTableList(user)
                 closeFunction()
             }
         }} text= "Создать"/>
