@@ -13,7 +13,7 @@ export const dbList = writable<bdListInterface[]>([])
 
 export async function getDbList(user:string){
     try{
-        const request  = await fetch(`http://127.0.0.1:5000/user_tables/${user}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/user_tables/${user}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",

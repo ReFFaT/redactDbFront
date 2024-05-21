@@ -17,7 +17,7 @@ export const user = writable<userInterface | null>(null)
 
 export async function auth(login:string,password:string) {
     try{
-        const request  = await fetch("http://127.0.0.1:5000/login",{
+        const request  = await fetch("http://reffattest.ru:5000/login",{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export async function auth(login:string,password:string) {
 export async function createUser(newUser: newUserInterface){
     if(newUser.repeatPass !== newUser.pass) return
     try{
-        const request  = await fetch("http://127.0.0.1:5000/users",{
+        const request  = await fetch("http://reffattest.ru:5000/users",{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",

@@ -18,7 +18,7 @@ export const table = writable<tableInterface | null>(null);
 
 export async function getTableList(user:string){
     try{
-        const request  = await fetch(`http://127.0.0.1:5000/user_tables_table/${user}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/user_tables_table/${user}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
