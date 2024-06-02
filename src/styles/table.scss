@@ -3,6 +3,16 @@
     width: 100%;
     padding: 30px;
     box-sizing: border-box;
+    &__title{
+        display: flex;
+        justify-content: space-between;
+        &-button{
+            max-width: 150px;
+            -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
+            -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
+            box-shadow: 6px 3px 30px 0px var(--content-bg);
+        }
+    }
     &__row{
         text-align: center;
         height: 30px;

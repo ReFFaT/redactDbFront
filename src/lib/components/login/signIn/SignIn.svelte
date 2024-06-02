@@ -1,7 +1,7 @@
 <script>
 	import Button from "$lib/components/Button.svelte";
 	import Input from "$lib/components/Input.svelte";
-	import { auth } from "$lib/store/user";
+	import { auth } from "$lib/helper/fetcher";
     import "./signIn.scss"
 
     let login = "";
