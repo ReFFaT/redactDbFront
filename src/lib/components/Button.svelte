@@ -12,6 +12,7 @@
     .button{
         width: 100%;
         height: 44px;
+        min-height: 44px;
         border-radius: 15px;
         border: none;
         background-color: var(--click-elem-bg);

@@ -13,7 +13,7 @@
 	import { goto } from '$app/navigation';
 	import DeleteRowModal from '$lib/components/deleteRowModal/DeleteRowModal.svelte';
 	import Modal from '$lib/components/Modal/Modal.svelte';
-	import { formatName } from '$lib/helper/helper';
+	import { formatName, formatColumn,type addColumnInterface} from '$lib/helper/helper';
 	import { type tableItem , table } from '$lib/store/table';
 	import { onMount } from 'svelte';
     import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem} from "$lib/helper/fetcher"
@@ -28,7 +28,7 @@
     let userId:string | null = null
     
     let showAddNewRow = false 
-    let newRowItems = {}
+    let newRowItems:{[key:string]:string} = {}
 
     let showDeleteRowModal = false
     let deleteRowIndex:number = -1
@@ -37,10 +37,10 @@
     let deleteColumnName = ''
 
     let showAddColumn = false
-    let addColumnName = ''
+    let addColumnArr:addColumnInterface[] = []
 
     let showEditRow = false
-    let editRowValues = {}
+    let editRowValues:{[key:string]:string} = {}
 
     function setTargetTable(){
         if($table && targetTableName && $table[targetTableName]) {
@@ -49,9 +49,15 @@
     }
 
     async function addRow (){
+        const newRowValues:{[key:string]:string} = {}
         const userId = localStorage.getItem("user")
+
+        for(let i in newRowItems){
+            newRowValues[i.split("_")[0]] = newRowItems[i]
+        }
+        
         if(targetTableName && userId) {
-            await addTableItem(targetTableName,newRowItems)
+            await addTableItem(targetTableName,newRowValues)
             await getTableList(userId?? '')
         }
         showAddNewRow = false
@@ -76,21 +82,26 @@
 
     async function addColumn() {
         if(targetTableName && userId) {
-            await addTableColumn(targetTableName,addColumnName)
+            await addTableColumn(targetTableName,addColumnArr)
             await getTableList(userId)    
         }
         showAddColumn = false
     }
 
     async function editRow() {
+        const newRowValues:{[key:string]:string} = {}
+
+        for(let i in editRowValues){
+            newRowValues[i.split("_")[0]] = editRowValues[i]
+        }
+
         if(targetTableName && userId) {
-            await editTableRow(targetTableName,editRowValues)
+            await editTableRow(targetTableName,newRowValues)
             await getTableList(userId)    
         }
         showEditRow = false
         editRowValues = {}
     }
-
     onMount(()=>{
         userId = localStorage.getItem("user")
         if(!userId) goto("/login")
@@ -117,8 +128,8 @@
                     {#each targetTable.fields as field }
                         <td class="table__row-elem table__row-elem-head">
                             <div class="table__row-head">
-                                {field}
-                                {#if field !== 'id'}
+                                {formatColumn(field)}
+                                {#if field !== 'id_INTEGER'}
                                     <button class="table__row-head-button" on:click={()=>{
                                         deleteColumnName = field
                                         showDeleteColumn = true
@@ -158,8 +169,8 @@
                         <td class="table__row-elem">
                             <button on:click={()=>{
                                 showDeleteRowModal = true
-                                if(data.id !== undefined){
-                                    deleteRowIndex = Number(data.id)
+                                if(data.id_INTEGER !== undefined){
+                                    deleteRowIndex = Number(data.id_INTEGER)
                                 }
                                 }} class="table__row-button text-font text-sm">
                                 <DeleteIcon class= "table__row-button-delete"/>
@@ -185,14 +196,13 @@
             editRowValues = {}
         }}
         on:click={editRow}
-        bind:editRowValues = {editRowValues}
+        editRowValues = {editRowValues}
         />
     </Modal>
 {/if}
 {#if showAddColumn}
     <Modal>
-        <AddColumnModal bind:columnNames = {addColumnName} closeModal = {()=>{
-            addColumnName = ''
+        <AddColumnModal bind:addColumnArr={addColumnArr} closeModal = {()=>{
             showAddColumn = false
         }} deleteFunc = {addColumn}/>
     </Modal>

@@ -2,6 +2,7 @@
 	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/Input.svelte';
 	import CloseModal from '$lib/components/closeModal/CloseModal.svelte';
+	import { formatColumn } from '$lib/helper/helper';
     import "./addTableItemModal.scss"
 
 	export let closeFunc = () => {};
@@ -9,7 +10,7 @@
 
     export let newItems:{[key:string]:string} = {}
     itemsList.forEach(field=>{
-        if(field !== "id")newItems[field] = ''
+        if(field !== "id_INTEGER")newItems[field] = ''
     })
 </script>
 
@@ -19,9 +20,9 @@
 	<div class="add-modal__items">
 		{#if itemsList}
 			{#each itemsList as field}
-				{#if field !== 'id'}
+				{#if field !== 'id_INTEGER'}
 					<div class="add-modal__input">
-						<Input bind:value = {newItems[field]} title={field} placeHolder={field} />
+						<Input bind:value = {newItems[field]} title={formatColumn(field)} placeHolder={formatColumn(field)} />
 					</div>
 				{/if}
 			{/each}
