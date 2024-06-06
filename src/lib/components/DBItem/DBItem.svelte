@@ -1,7 +1,6 @@
 <script lang="ts">
-	import  CloseIcon  from '$lib/icons/close.svg?component';
 	import Modal  from '$lib/components/Modal/Modal.svelte';
-	import { deleteDB } from "$lib/helper/fetcher";
+	import { deleteDB, downLoadTable } from "$lib/helper/fetcher";
 	import { getDbList } from "$lib/store/dbList";
 	import Button from "../Button.svelte";
     import "./dbItem.scss"
@@ -11,6 +10,7 @@
     export let dbName = "";
     export let dbTitle = ""; 
     export let dbIdName = "";
+    export let fullDBName = ""
 
     let deleteModal =false
 
@@ -30,6 +30,9 @@
         <Button text="Перейти к таблице" classStr='db__item-button' on:click={()=>{
             sessionStorage.setItem("targetTable",dbIdName)
             goto("/table")
+        }}/>
+        <Button text="Скачать в XLSX" classStr='db__item-button' on:click={async ()=>{
+            const res = downLoadTable(fullDBName)
         }}/>
         <Button text="Удалить" classStr='db__item-button' on:click={()=>deleteModal =true}/>
     </div>

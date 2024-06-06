@@ -200,3 +200,86 @@ export async function editTableRow(tableName:string, rowValue:{[key:string]:stri
         console.error(err)
     } 
 }
+
+
+export async function searchTable(tableName:string,searchRow:{value:string,field:string}):Promise<{[key:string]:string}[]>{
+    try{
+        const user = localStorage.getItem('user')
+        if(!user) location.reload()
+        const request  = await fetch(`http://reffattest.ru:5000/search-table/${tableName}?column=${searchRow.field}&value=${searchRow.value}`,{
+            method:"GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+        return response
+    }
+    catch(err){
+        console.error(err)
+    }
+    return [] 
+}
+
+
+export interface filterValueInterface{
+    table:string,
+    filters:({
+        column:string,
+        from:string,
+        to:string
+    } |{
+        column:string,
+        value:string
+    })[]
+}
+export async function searchFilter(filterValue:filterValueInterface):Promise<{[key:string]:string}[]>{
+    try{
+        const user = localStorage.getItem('user')
+        if(!user) location.reload()
+        const request  = await fetch(`http://reffattest.ru:5000/filter`,{
+            method:"POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify(filterValue)
+        })
+        const response = await request.json()
+        if(!request.ok) throw new Error(response.error)
+        return response
+    }
+    catch(err){
+        console.error(err)
+    }
+    return [] 
+}
+
+export async function downLoadTable(tableName:string){
+    try{
+        const response = await fetch('http://reffattest.ru:5000/export', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ table: tableName })
+        });
+
+        if (response.ok) {
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `${tableName}.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        } else {
+            console.error('Failed to export table');
+        }
+    }
+    catch(err){
+        console.error(err)
+    }
+}

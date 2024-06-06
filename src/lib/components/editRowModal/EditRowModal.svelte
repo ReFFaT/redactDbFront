@@ -9,6 +9,8 @@
 
 	export let closeFunc = () => {};
     export let editRowValues:editRowInterface = {}
+	export let fields:string[] = []
+
     let editRowElms = Object.keys(editRowValues)
 </script>
 
@@ -18,9 +20,9 @@
 	<div class="edit-modal__items">
 		{#if editRowElms}
 			{#each editRowElms as field}
-				{#if field !== 'id_INTEGER'}
+				{#if field !== 'id'}
 					<div class="edit-modal__input">
-						<Input bind:value = {editRowValues[field]} title={formatColumn(field)} placeHolder={field} />
+						<Input bind:value = {editRowValues[field]} title={formatColumn(fields.find(elem=>elem.split("_")[0] === field)?? "")} placeHolder={field} />
 					</div>
 				{/if}
 			{/each}

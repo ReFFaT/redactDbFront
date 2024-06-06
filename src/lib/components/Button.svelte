@@ -19,9 +19,12 @@
         cursor: pointer;
         font-size: clamp(16px,4vw,20px);
         margin: 0;
-        padding: 0 8px;
+        padding: 0 15px;
         box-sizing: border-box;
         transition: all .3s;
+        -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
+        -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
+        box-shadow: 6px 3px 30px 0px var(--content-bg);
         &:active{
             transform: scale(.9);
         }

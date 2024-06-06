@@ -6,8 +6,24 @@
     &__title{
         display: flex;
         justify-content: space-between;
+        &-search{
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            &-input{
+                width: 350px;
+            }
+            &-select{
+                width: 200px;
+            }
+        }
+        &-buttons{
+            display: flex;
+            gap: 10px;
+        }
         &-button{
-            max-width: 150px;
+            text-wrap: nowrap;
+            max-width: min-content;
             -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
             -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
             box-shadow: 6px 3px 30px 0px var(--content-bg);
@@ -16,13 +32,16 @@
     &__row{
         text-align: center;
         height: 30px;
-        
+        &-color{
+            background-color: var(--click-elem-bg);
+        }
         &-button-delete{
             fill: var(--color-text);
         }
     }
     &__row-head{
         display: flex;
+        text-wrap: nowrap;
         align-items: center;
         justify-content: center;
     }

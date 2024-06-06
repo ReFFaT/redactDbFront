@@ -3,7 +3,7 @@ import { writable } from 'svelte/store';
 
 export interface tableItem{
     data: {
-        [key:string]:string | number
+        [key:string]:string
     }[],
     fields: string[]
 }

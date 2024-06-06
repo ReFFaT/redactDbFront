@@ -5,6 +5,7 @@
 	import CloseModal from '$lib/components/closeModal/CloseModal.svelte';
     import "./addColumnModal.scss" 
 	import { onDestroy } from 'svelte';
+	import Select from '$lib/components/Select/Select.svelte';
     export let closeModal = ()=>{}
     export let deleteFunc = ()=>{}
     export let addColumnArr : addColumnInterface[] = []
@@ -15,6 +16,28 @@
             column.type = selectElem.value
         }
     }
+    let selectItems = [
+    {
+        value:"UNKNOWN",
+        description:"(Динамический тип данных)"
+    },
+    {
+        value:"BLOB",
+        description:"(Двоичные данные)"
+    },
+    {
+        value:"INTEGER",
+        description:"(Целые числа)"
+    },
+    {
+        value:"REAL",
+        description:"(Числа с плавающей точкой)"
+    },
+    {
+        value:"TEXT",
+        description:"(Строчный тип)"
+    }
+    ]
     onDestroy(()=>{
         addColumnArr = []
     })
@@ -28,13 +51,11 @@
         <div class="add-column__input">
             <Input title="Введите название" bind:value={column.col}/> 
             <p class="add-column__select-title text-sm text-font">Выберите тип</p>
-            <select class="select text-font" on:change={(e)=>changeValue(e,column)}>
-                <option class="select__option" value="">UNKNOWN (Динамический тип данных)</option>
-                <option class="select__option" value="BLOB">BLOB (Двоичные данные)</option>
-                <option class="select__option" value="INTEGER">INTEGER (Целое число)</option>
-                <option class="select__option" value="REAL">REAL (Число с плавающей точкой)</option>
-                <option class="select__option" value="TEXT">TEXT (Строка)</option>
-            </select>
+            <Select on:change={(e)=>changeValue(e,column)}
+                items={selectItems}
+                value = {selectItems[0].value}
+                placeholder="Выберите тип данных"
+                />
             <button class="add-column__button text-sm"
             on:click={()=>{
                 addColumnArr.splice(index, 1);
