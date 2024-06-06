@@ -70,9 +70,9 @@
 			box-sizing: border-box;
 			outline: none;
 			border: none;
-			-webkit-box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);
-			-moz-box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);
-			box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);
+			-webkit-box-shadow: 0px 0px 33px -4px var(--shadow-color);
+			-moz-box-shadow: 0px 0px 33px -4px var(--shadow-color);
+			box-shadow: 0px 0px 33px -4px var(--shadow-color);
 		}
 		&__image {
 			top: 6px;

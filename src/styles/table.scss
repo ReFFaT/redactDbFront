@@ -37,7 +37,7 @@
         text-align: center;
         height: 30px;
         &-color{
-            background-color: var(--click-elem-bg);
+            background-color: var(--table-row-color);
         }
         &-button-delete{
             fill: var(--color-text);
@@ -77,8 +77,9 @@
         border-bottom: 1px solid var(--color-text);
     }
     &__row-delete{
-        max-width: 50px;
-        min-width: 50px;
+        max-width: 60px;
+        width: 60px;
+        min-width: 60px;
     }
     &__row-elem{
         padding: 0 15px;
@@ -88,6 +89,9 @@
             max-width: 200px;
             display: block;
         }
+    }
+    &__row-elem-buttons{
+        margin: 0 auto;
     }
     &__new{
         width: 100%;
@@ -125,10 +129,10 @@
     padding: 10px;
 }
 .table__overflow{
-    border: 1px solid var(--content-bg);
-    -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
-    -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
-    box-shadow: 6px 3px 30px 0px var(--content-bg);
+    border: 1px solid var(--shadow-color);
+    -webkit-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+    -moz-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+    box-shadow: 6px 3px 30px 0px var(--shadow-color);
     border-radius: 20px;
     margin: 0 auto;
     width: calc(100vw - 150px);

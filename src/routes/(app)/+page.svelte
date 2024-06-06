@@ -40,7 +40,7 @@
     .database{
         padding: 30px;
         width: 100%;
-        background-color: rgb(40, 39, 39);
+        background-color: var(--body-background-color);
         &__list{
             display: flex;
             flex-direction: column;

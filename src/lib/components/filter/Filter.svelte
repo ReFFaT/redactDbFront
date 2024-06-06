@@ -9,7 +9,7 @@
     export let fields:string[] = []
     export let targetTable:tableItem | null = null
 
-    let fieldsList: string[][] =[]
+    let fieldsList: string[][] = []
     
     let filterValue: filterValueInterface = {
         table:"",
@@ -17,8 +17,10 @@
     }
 
     function setFieldsList(){
-        if(targetTableName) filterValue.table = targetTableName
+        if(fields.length === filterValue.filters.length) return
+        else filterValue.filters = []
 
+        if(targetTableName) filterValue.table = targetTableName
         fieldsList = fields.map(el=>el.split("_"))
         fieldsList.forEach(el=>{
             if(el[1]==="INTEGER"||el[1] === "REAL") filterValue.filters.push({
@@ -37,6 +39,7 @@
             targetTable.data = []
             const res = await searchFilter(filterValue)
             targetTable.data = res
+            openFilter = false
         }
     }
 

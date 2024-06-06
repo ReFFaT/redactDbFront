@@ -229,7 +229,7 @@
                                         if(data.id !== undefined){
                                             deleteRowIndex = Number(data.id)
                                         }
-                                        }} class="table__row-button text-font text-sm">
+                                        }} class="table__row-button table__row-elem-buttons text-font text-sm">
                                         <DeleteIcon class= "table__row-button-delete"/>
                                     </button>
                                 </td>
@@ -237,7 +237,7 @@
                                     <button title="Редактировать данные" on:click={()=>{
                                         showEditRow = true
                                         editRowValues = data
-                                        }} class="table__row-button text-font text-sm">
+                                        }} class="table__row-button table__row-elem-buttons text-font text-sm">
                                         <Pencil class= "table__row-button-delete"/>
                                     </button>
                                 </td>

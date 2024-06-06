@@ -22,9 +22,9 @@
         padding: 0 15px;
         box-sizing: border-box;
         transition: all .3s;
-        -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
-        -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
-        box-shadow: 6px 3px 30px 0px var(--content-bg);
+        -webkit-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+        -moz-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+        box-shadow: 6px 3px 30px 0px var(--shadow-color);
         &:active{
             transform: scale(.9);
         }
