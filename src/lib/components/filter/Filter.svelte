@@ -64,10 +64,10 @@
                     {/if}
                 </div>
             {/each}
-            <div class="filter__buttons">
-                <Button text="Закрыть" on:click={()=>openFilter = false}/>
-                <Button text="Отправить" on:click={getFilterTable}/>
-            </div>
+        </div>
+        <div class="filter__buttons">
+            <Button text="Закрыть" on:click={()=>openFilter = false}/>
+            <Button text="Отправить" on:click={getFilterTable}/>
         </div>
     </div>
 </div>
@@ -98,6 +98,8 @@
         &__list{
             width: 100%;
             padding: 20px;
+            height: calc(100% - 60px);
+            margin: 30px 0;
             display: flex;
             flex-direction: column;
             gap: 20px;
@@ -113,6 +115,8 @@
             outline: none;
         }
         &__content{ 
+            display: flex;
+            flex-direction: column;
             width: 500px;
             height: 100vh;
             box-sizing: border-box;

@@ -171,78 +171,85 @@
             <div class="table__title-search-input">
                 <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
             </div>
-            
             <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
-            <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
+            <div class="table__title-buttons">
+                <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
+                <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
+                <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
+                <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
+                    sessionStorage.setItem("targetTable","")
+                    goto('/')}}
+                />
+            </div>
         </div>
         <div class="table__title-buttons">
-            <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
-            <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
-            <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
-                sessionStorage.setItem("targetTable","")
-                goto('/')}}
-            />
+            
         </div>
     </div>
     {#if targetTable}
-        <table class="table__wrapper">
-            <thead>
-                <tr class="table__row  text-font text-sm">
-                    {#each targetTable.fields as field }
-                        <td class="table__row-elem table__row-elem-head">
-                            <div class="table__row-head">
-                                {formatColumn(field)}
-                                {#if field !== 'id_INTEGER'}
-                                    <button class="table__row-head-button" title="Удалить столбец" on:click={()=>{
-                                        deleteColumnName = field
-                                        showDeleteColumn = true
-                                    }}>
+        <div class="table__overflow">
+            <div class="table__overflow-hidden">
+                <table class="table__wrapper">
+                    <thead>
+                        <tr class="table__row  text-font text-sm">
+                            <td class="table__row-delete table__row-elem-head">
+                                
+                            </td>
+                            <td class="table__row-delete table__row-elem-head">
+                                <button class="table__row-head-button" title="Добавить столбец" on:click={()=>{
+                                    showAddColumn = true
+                                }}>
+                                    <AddIcon class="table__new-head-icon"/>
+                                </button>
+                            </td>
+                            {#each targetTable.fields as field }
+                                <td class="table__row-elem table__row-elem-head">
+                                    <div class="table__row-head">
+                                        {formatColumn(field)}
+                                        {#if field !== 'id_INTEGER'}
+                                            <button class="table__row-head-button" title="Удалить столбец" on:click={()=>{
+                                                deleteColumnName = field
+                                                showDeleteColumn = true
+                                            }}>
+                                                <DeleteIcon class= "table__row-button-delete"/>
+                                            </button>
+                                        {/if}
+                                    </div>
+                                </td>
+                            {/each}
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each targetTable.data as data,index}
+                            <tr class="table__row text-font text-sm {index%2!==0 && "table__row-color"}" in:scale={{delay:200,duration:300}}>
+                                <td class="table__row-elem" title="Удалить данные">
+                                    <button on:click={()=>{
+                                        showDeleteRowModal = true
+                                        if(data.id !== undefined){
+                                            deleteRowIndex = Number(data.id)
+                                        }
+                                        }} class="table__row-button text-font text-sm">
                                         <DeleteIcon class= "table__row-button-delete"/>
                                     </button>
-                                {/if}
-                            </div>
-                        </td>
-                    {/each}
-                    <td class="table__row-delete table__row-elem-head">
-                        
-                    </td>
-                    <td class="table__row-delete table__row-elem-head">
-                        <button class="table__row-head-button" title="Добавить столбец" on:click={()=>{
-                            showAddColumn = true
-                        }}>
-                            <AddIcon class="table__new-head-icon"/>
-                        </button>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                {#each targetTable.data as data,index}
-                    <tr class="table__row text-font text-sm {index%2!==0 && "table__row-color"}" in:scale={{delay:200,duration:300}}>
-                        {#each targetTable.fields as field }
-                                <td class="table__row-elem">{data[field.split("_")[0]]?? ''}</td>
+                                </td>
+                                <td class="table__row-elem">
+                                    <button title="Редактировать данные" on:click={()=>{
+                                        showEditRow = true
+                                        editRowValues = data
+                                        }} class="table__row-button text-font text-sm">
+                                        <Pencil class= "table__row-button-delete"/>
+                                    </button>
+                                </td>
+                                {#each targetTable.fields as field }
+                                        <td class="table__row-elem">{data[field.split("_")[0]]?? ''}</td>
+                                {/each}
+                            </tr>
                         {/each}
-                        <td class="table__row-elem">
-                            <button title="Редактировать данные" on:click={()=>{
-                                showEditRow = true
-                                editRowValues = data
-                                }} class="table__row-button text-font text-sm">
-                                <Pencil class= "table__row-button-delete"/>
-                            </button>
-                        </td>
-                        <td class="table__row-elem" title="Удалить данные">
-                            <button on:click={()=>{
-                                showDeleteRowModal = true
-                                if(data.id !== undefined){
-                                    deleteRowIndex = Number(data.id)
-                                }
-                                }} class="table__row-button text-font text-sm">
-                                <DeleteIcon class= "table__row-button-delete"/>
-                            </button>
-                        </td>
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     {/if}
 </div>
 
