@@ -1,9 +1,19 @@
+// :root{
+//     --body-background-color: #212121;
+//     --content-bg: #161616;
+
+//     --click-elem-bg:#2c2c2c;
+
+//     --color-text:white;
+//     --color-text-second:rgb(170,170,170);
+// }
 :root{
-    --body-background-color: #212121;
-    --content-bg: #161616;
-
+    --body-background-color: #494949;
+    --content-bg: #979797;
+    --shadow-color: rgba(0, 0, 0, 0.55);
+    --table-row-color:#2c2c2c;
     --click-elem-bg:#2c2c2c;
-
+    --modal-color: #494949;
     --color-text:white;
     --color-text-second:rgb(170,170,170);
 }

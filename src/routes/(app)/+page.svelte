@@ -1,4 +1,5 @@
 <script lang="ts">
+     // @ts-ignore
 	import AddIcon from "$lib/icons/add-icon.svg?component";
 
     import DBItem from '$lib/components/DBItem/DBItem.svelte';
@@ -15,18 +16,18 @@
     <div class="database">
         <h1>Мои таблицы</h1>
         <ul class="database__list">
-            {#each $dbList as db}
-                <li class="database__list-item" in:scale={{duration:300}}>
-                    <DBItem dbName={formatName(db.user_table)}  dbTitle={db.table_description} dbIdName={db.user_table}/>
-                </li>
-            {/each}
             <li class="database__list-item">
                 <div class="item-db-add">
-                    <button class="item-db-add__button" on:click={()=>addNewDB = true}>
+                    <button class="item-db-add__button" title="Создать таблицу" on:click={()=>addNewDB = true}>
                         <AddIcon class="item-db-add__icon"/>
                     </button>
                 </div>
             </li>
+            {#each $dbList as db}
+                <li class="database__list-item" in:scale={{duration:300}}>
+                    <DBItem fullDBName={db.user_table} dbName={formatName(db.user_table)}  dbTitle={db.table_description} dbIdName={db.user_table}/>
+                </li>
+            {/each}
         </ul>
     </div>
 {#if addNewDB}
@@ -39,7 +40,7 @@
     .database{
         padding: 30px;
         width: 100%;
-        background-color: rgb(40, 39, 39);
+        background-color: var(--body-background-color);
         &__list{
             display: flex;
             flex-direction: column;

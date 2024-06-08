@@ -2,13 +2,15 @@
 	import Button from '$lib/components/Button.svelte';
 	import Input from '$lib/components/Input.svelte';
 	import CloseModal from '$lib/components/closeModal/CloseModal.svelte';
-
+	import { formatColumn } from '$lib/helper/helper';
     import "./editRowModal.scss"
-    interface editRowInterface {
-        [key:string]:string
-    }
+
+    interface editRowInterface {[key:string]:string}
+
 	export let closeFunc = () => {};
     export let editRowValues:editRowInterface = {}
+	export let fields:string[] = []
+
     let editRowElms = Object.keys(editRowValues)
 </script>
 
@@ -20,7 +22,7 @@
 			{#each editRowElms as field}
 				{#if field !== 'id'}
 					<div class="edit-modal__input">
-						<Input bind:value = {editRowValues[field]} title={field} placeHolder={field} />
+						<Input bind:value = {editRowValues[field]} title={formatColumn(fields.find(elem=>elem.split("_")[0] === field)?? "")} placeHolder={field} />
 					</div>
 				{/if}
 			{/each}

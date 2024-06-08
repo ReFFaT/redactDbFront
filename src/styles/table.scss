@@ -6,8 +6,28 @@
     &__title{
         display: flex;
         justify-content: space-between;
+        flex-direction: column;
+        gap: 30px;
+        &-search{
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            &-input{
+                width: 350px;
+            }
+            &-select{
+                width: 200px;
+            }
+        }
+        &-buttons{
+            display: flex;
+            gap: 10px;
+            margin-left: auto;
+            padding-left: 30px;
+        }
         &-button{
-            max-width: 150px;
+            text-wrap: nowrap;
+            max-width: min-content;
             -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
             -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
             box-shadow: 6px 3px 30px 0px var(--content-bg);
@@ -16,13 +36,16 @@
     &__row{
         text-align: center;
         height: 30px;
-        
+        &-color{
+            background-color: var(--table-row-color);
+        }
         &-button-delete{
             fill: var(--color-text);
         }
     }
     &__row-head{
         display: flex;
+        text-wrap: nowrap;
         align-items: center;
         justify-content: center;
     }
@@ -54,8 +77,9 @@
         border-bottom: 1px solid var(--color-text);
     }
     &__row-delete{
-        max-width: 50px;
-        width: 50px;
+        max-width: 60px;
+        width: 60px;
+        min-width: 60px;
     }
     &__row-elem{
         padding: 0 15px;
@@ -65,6 +89,9 @@
             max-width: 200px;
             display: block;
         }
+    }
+    &__row-elem-buttons{
+        margin: 0 auto;
     }
     &__new{
         width: 100%;
@@ -98,11 +125,27 @@
 }
 .table__wrapper{
     width: 100%;
-    margin-top: 30px;
     border-radius: 10px;
     padding: 10px;
-    border: 1px solid var(--content-bg);
-    -webkit-box-shadow: 6px 3px 30px 0px var(--content-bg);
-    -moz-box-shadow: 6px 3px 30px 0px var(--content-bg);
-    box-shadow: 6px 3px 30px 0px var(--content-bg);
+}
+.table__overflow{
+    border: 1px solid var(--shadow-color);
+    -webkit-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+    -moz-box-shadow: 6px 3px 30px 0px var(--shadow-color);
+    box-shadow: 6px 3px 30px 0px var(--shadow-color);
+    border-radius: 20px;
+    margin: 0 auto;
+    width: calc(100vw - 150px);
+    overflow: hidden;
+    scrollbar-width: thin;
+
+}
+.table__overflow-hidden{
+    margin:0 auto;
+    padding: 10px 0 30px 0;
+    max-width: 100%;
+    width: 100%;
+    scrollbar-width: thin;
+    overflow-y: hidden;
+    overflow-x: auto;
 }

@@ -13,22 +13,25 @@
 	import { goto } from '$app/navigation';
 	import DeleteRowModal from '$lib/components/deleteRowModal/DeleteRowModal.svelte';
 	import Modal from '$lib/components/Modal/Modal.svelte';
-	import { formatName } from '$lib/helper/helper';
+	import { formatName, formatColumn,type addColumnInterface} from '$lib/helper/helper';
 	import { type tableItem , table } from '$lib/store/table';
 	import { onMount } from 'svelte';
-    import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem} from "$lib/helper/fetcher"
+    import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem,searchTable} from "$lib/helper/fetcher"
     import { getTableList } from '$lib/store/table';
     
     import "$styles/table.scss"
 	import EditRowModal from "$lib/components/editRowModal/EditRowModal.svelte";
 	import Button from "$lib/components/Button.svelte";
+	import Input from "$lib/components/Input.svelte";
+	import Select from "$lib/components/Select/Select.svelte";
+	import Filter from "$lib/components/filter/Filter.svelte";
 
     let targetTableName: string | null = null
     let targetTable: tableItem | null = null
     let userId:string | null = null
-    
+
     let showAddNewRow = false 
-    let newRowItems = {}
+    let newRowItems:{[key:string]:string} = {}
 
     let showDeleteRowModal = false
     let deleteRowIndex:number = -1
@@ -37,10 +40,32 @@
     let deleteColumnName = ''
 
     let showAddColumn = false
-    let addColumnName = ''
+    let addColumnArr:addColumnInterface[] = []
 
     let showEditRow = false
-    let editRowValues = {}
+    let editRowValues:{[key:string]:string} = {}
+
+
+    let searchRow = {
+        field:"",
+        value:""
+    }
+    let isSearchButton = true
+    function changeSearchButton(){
+        if(searchRow.field !== "" && searchRow.value !== "") isSearchButton = false
+        else isSearchButton = true
+    }
+    function resetSearch(){
+        searchRow.field = ""
+        searchRow.value = ""
+    }
+
+    interface filterValueInterface{
+
+    }
+
+    let openFilter = false
+
 
     function setTargetTable(){
         if($table && targetTableName && $table[targetTableName]) {
@@ -49,11 +74,18 @@
     }
 
     async function addRow (){
+        const newRowValues:{[key:string]:string} = {}
         const userId = localStorage.getItem("user")
+
+        for(let i in newRowItems){
+            newRowValues[i.split("_")[0]] = newRowItems[i]
+        }
+        
         if(targetTableName && userId) {
-            await addTableItem(targetTableName,newRowItems)
+            await addTableItem(targetTableName,newRowValues)
             await getTableList(userId?? '')
         }
+        resetSearch()
         showAddNewRow = false
         newRowItems = {}
     }
@@ -63,6 +95,7 @@
             await deleteTableRow(targetTableName,deleteRowIndex)
             await getTableList(userId)    
         }
+        resetSearch()
         showDeleteRowModal = false
     }
 
@@ -71,24 +104,49 @@
             await deleteTableColumn(targetTableName,deleteColumnName)
             await getTableList(userId)    
         }
+        resetSearch()
         showDeleteColumn = false
     }
 
     async function addColumn() {
         if(targetTableName && userId) {
-            await addTableColumn(targetTableName,addColumnName)
+            await addTableColumn(targetTableName,addColumnArr)
             await getTableList(userId)    
         }
+        resetSearch()
         showAddColumn = false
     }
 
     async function editRow() {
+        const newRowValues:{[key:string]:string} = {}
+
+        for(let i in editRowValues){
+            newRowValues[i.split("_")[0]] = editRowValues[i]
+        }
+
         if(targetTableName && userId) {
-            await editTableRow(targetTableName,editRowValues)
+            await editTableRow(targetTableName,newRowValues)
             await getTableList(userId)    
         }
+        resetSearch()
         showEditRow = false
         editRowValues = {}
+    }
+
+    async function getSearch() {
+        if(targetTableName && userId && targetTable?.data) {
+            targetTable.data = []
+            const res = await searchTable(targetTableName,searchRow)
+            targetTable.data = res
+        }
+    }
+    async function reSearch() {
+        if(userId && targetTable?.data) {
+            targetTable.data = []
+            await getTableList(userId)
+            resetSearch()
+        }
+        
     }
 
     onMount(()=>{
@@ -99,80 +157,98 @@
     })
 
     $:targetTableName && $table && setTargetTable()
+    $:searchRow && changeSearchButton()
 </script>
 
 
 <div class="table">
     <div class="table__title">
         <h1>Таблица {formatName(targetTableName?? "")}</h1>
-        <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
-            sessionStorage.setItem("targetTable","")
-            goto('/')}}
-        />
+        <div class="table__title-search">
+            <div class="table__title-search-select">
+                <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+            </div>
+            <div class="table__title-search-input">
+                <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
+            </div>
+            <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
+            <div class="table__title-buttons">
+                <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
+                <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
+                <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
+                <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
+                    sessionStorage.setItem("targetTable","")
+                    goto('/')}}
+                />
+            </div>
+        </div>
+        <div class="table__title-buttons">
+            
+        </div>
     </div>
     {#if targetTable}
-        <table class="table__wrapper">
-            <thead>
-                <tr class="table__row  text-font text-sm">
-                    {#each targetTable.fields as field }
-                        <td class="table__row-elem table__row-elem-head">
-                            <div class="table__row-head">
-                                {field}
-                                {#if field !== 'id'}
-                                    <button class="table__row-head-button" on:click={()=>{
-                                        deleteColumnName = field
-                                        showDeleteColumn = true
-                                    }}>
+        <div class="table__overflow">
+            <div class="table__overflow-hidden">
+                <table class="table__wrapper">
+                    <thead>
+                        <tr class="table__row  text-font text-sm">
+                            <td class="table__row-delete table__row-elem-head">
+                                
+                            </td>
+                            <td class="table__row-delete table__row-elem-head">
+                                <button class="table__row-head-button" title="Добавить столбец" on:click={()=>{
+                                    showAddColumn = true
+                                }}>
+                                    <AddIcon class="table__new-head-icon"/>
+                                </button>
+                            </td>
+                            {#each targetTable.fields as field }
+                                <td class="table__row-elem table__row-elem-head">
+                                    <div class="table__row-head">
+                                        {formatColumn(field)}
+                                        {#if field !== 'id_INTEGER'}
+                                            <button class="table__row-head-button" title="Удалить столбец" on:click={()=>{
+                                                deleteColumnName = field
+                                                showDeleteColumn = true
+                                            }}>
+                                                <DeleteIcon class= "table__row-button-delete"/>
+                                            </button>
+                                        {/if}
+                                    </div>
+                                </td>
+                            {/each}
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each targetTable.data as data,index}
+                            <tr class="table__row text-font text-sm {index%2!==0 && "table__row-color"}" in:scale={{delay:200,duration:300}}>
+                                <td class="table__row-elem" title="Удалить данные">
+                                    <button on:click={()=>{
+                                        showDeleteRowModal = true
+                                        if(data.id !== undefined){
+                                            deleteRowIndex = Number(data.id)
+                                        }
+                                        }} class="table__row-button table__row-elem-buttons text-font text-sm">
                                         <DeleteIcon class= "table__row-button-delete"/>
                                     </button>
-                                {/if}
-                            </div>
-                        </td>
-                    {/each}
-                    <td class="table__row-delete table__row-elem-head">
-                        
-                    </td>
-                    <td class="table__row-delete table__row-elem-head">
-                        <button class="table__row-head-button" on:click={()=>{
-                            showAddColumn = true
-                        }}>
-                            <AddIcon class="table__new-head-icon"/>
-                        </button>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-                {#each targetTable.data as data}
-                    <tr class="table__row text-font text-sm" in:scale={{delay:200,duration:300}}>
-                        {#each targetTable.fields as field }
-                                <td class="table__row-elem">{data[field]?? ''}</td>
+                                </td>
+                                <td class="table__row-elem">
+                                    <button title="Редактировать данные" on:click={()=>{
+                                        showEditRow = true
+                                        editRowValues = data
+                                        }} class="table__row-button table__row-elem-buttons text-font text-sm">
+                                        <Pencil class= "table__row-button-delete"/>
+                                    </button>
+                                </td>
+                                {#each targetTable.fields as field }
+                                        <td class="table__row-elem">{data[field.split("_")[0]]?? ''}</td>
+                                {/each}
+                            </tr>
                         {/each}
-                        <td class="table__row-elem">
-                            <button on:click={()=>{
-                                showEditRow = true
-                                editRowValues = data
-                                }} class="table__row-button text-font text-sm">
-                                <Pencil class= "table__row-button-delete"/>
-                            </button>
-                        </td>
-                        <td class="table__row-elem">
-                            <button on:click={()=>{
-                                showDeleteRowModal = true
-                                if(data.id !== undefined){
-                                    deleteRowIndex = Number(data.id)
-                                }
-                                }} class="table__row-button text-font text-sm">
-                                <DeleteIcon class= "table__row-button-delete"/>
-                            </button>
-                        </td>
-                    </tr>
-                {/each}
-            </tbody>
-        </table>
-        <div class="table__new">
-            <button class="table__new-button" on:click={()=>showAddNewRow = true}>
-                <AddIcon class="table__new-icon"/>
-            </button>
+                    </tbody>
+                </table>
+            </div>
         </div>
     {/if}
 </div>
@@ -184,15 +260,15 @@
             showEditRow = false
             editRowValues = {}
         }}
+        fields = {targetTable?.fields}
         on:click={editRow}
-        bind:editRowValues = {editRowValues}
+        editRowValues = {editRowValues}
         />
     </Modal>
 {/if}
 {#if showAddColumn}
     <Modal>
-        <AddColumnModal bind:columnNames = {addColumnName} closeModal = {()=>{
-            addColumnName = ''
+        <AddColumnModal bind:addColumnArr={addColumnArr} closeModal = {()=>{
             showAddColumn = false
         }} deleteFunc = {addColumn}/>
     </Modal>
@@ -218,3 +294,4 @@
         <AddTableItemModal on:click={addRow} bind:newItems={newRowItems} itemsList={targetTable?.fields?? []} closeFunc={()=>showAddNewRow = false} />
     </Modal>
 {/if}
+<Filter bind:targetTable={targetTable} fields={targetTable?.fields} targetTableName={targetTableName} bind:openFilter = {openFilter}/>
