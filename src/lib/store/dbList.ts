@@ -2,10 +2,10 @@ import { writable } from 'svelte/store';
 
 interface bdListInterface{
         id: number;
-        table_columns: string;
-        table_description: string;
-        user: string;
-        user_table: string;
+        record_count: number
+        columns: string[];
+        description: string;
+        tables: string;
 }
 
 
@@ -13,7 +13,7 @@ export const dbList = writable<bdListInterface[]>([])
 
 export async function getDbList(user:string){
     try{
-        const request  = await fetch(`http://reffattest.ru:5000/user_tables/${user}`,{
+        const request  = await fetch(`http://127.0.0.1:5000/user_tables/${user}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",

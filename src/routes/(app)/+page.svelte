@@ -6,11 +6,18 @@
     import { scale } from "svelte/transition"
 	import Modal from '$lib/components/Modal/Modal.svelte';
 	import AddDataBaseModal from '$lib/components/addDataBaseModal/AddDataBaseModal.svelte';
-	import { table } from '$lib/store/table';
-	import { dbList } from '$lib/store/dbList';
-	import { formatName } from '$lib/helper/helper';
-	
+	import { dbList, getDbList } from '$lib/store/dbList';
+	import { onMount } from "svelte";
+	import { goto } from "$app/navigation";
     let addNewDB = false
+    onMount(()=>{
+        const currentDB = localStorage.getItem("currentDB")
+
+        if(!currentDB) goto("/login")
+        if( currentDB){
+            getDbList(currentDB)
+        }
+    })
 </script>
 
     <div class="database">
@@ -25,7 +32,7 @@
             </li>
             {#each $dbList as db}
                 <li class="database__list-item" in:scale={{duration:300}}>
-                    <DBItem fullDBName={db.user_table} dbName={formatName(db.user_table)}  dbTitle={db.table_description} dbIdName={db.user_table}/>
+                    <DBItem dbColumns={db.columns} dbName={db.tables} dbCount={db.record_count} dbTitle={db.description}/>
                 </li>
             {/each}
         </ul>

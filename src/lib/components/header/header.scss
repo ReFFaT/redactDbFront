@@ -1,6 +1,10 @@
 .header{
     width: 50px;
     min-height: 100vh;
+    transition: all .3s;
+    &:hover{
+        width: 230px;
+    }
     &__wrapper{
         display: flex;
         box-sizing: border-box;
@@ -16,15 +20,24 @@
         -webkit-box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
         -moz-box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
         box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
+        transition: all .3s;
+        &:hover{
+            width: 200px;
+        }
     }
     &__button{
         border: none;
-        justify-content: center;
         display: flex;
         align-items: center;
         transition: all .3s;
         background-color: transparent;
-        padding: 10px 0;
+        overflow: hidden;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        position: relative;
+        
+        right: 0;
         -webkit-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
         -moz-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
         box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
@@ -39,6 +52,8 @@
         padding: 10px 0;
     }
     &__icon{
+        min-width: 30px;
+        min-height: 30px;
         width: 30px;
         height: 30px;
         fill: var(--color-text);

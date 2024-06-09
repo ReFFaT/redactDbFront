@@ -51,6 +51,7 @@
 <style lang="scss">
 	.input-title{
 		margin-left: 10px;
+		margin-bottom: 5px;
 	}
 	.input {
 		width: 100%;
@@ -60,7 +61,7 @@
 		user-select: none;
 		border: none;
 		&__inp {
-			background-color: var(--body-background-color);
+			background-color: var(--click-elem-bg);
 			width: 100%;
 			height: 40px;
 			border-radius: 8px;
@@ -73,6 +74,9 @@
 			-webkit-box-shadow: 0px 0px 33px -4px var(--shadow-color);
 			-moz-box-shadow: 0px 0px 33px -4px var(--shadow-color);
 			box-shadow: 0px 0px 33px -4px var(--shadow-color);
+			&::placeholder{
+				color: var(--color-text-second);
+			}
 		}
 		&__image {
 			top: 6px;

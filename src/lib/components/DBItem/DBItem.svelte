@@ -6,33 +6,40 @@
     import "./dbItem.scss"
 	import { goto } from '$app/navigation';
 	import CloseModal from '../closeModal/CloseModal.svelte';
+	import { get } from 'svelte/store';
 
     export let dbName = "";
     export let dbTitle = ""; 
-    export let dbIdName = "";
-    export let fullDBName = ""
-
+    export let dbCount = 0
+    export let dbColumns:string[] = []
     let deleteModal =false
 
     async function deleteDataBase(){
-        const user = localStorage.getItem('user')
-        await deleteDB(dbIdName)
-        if(user) getDbList(user)
+        const currentDB = localStorage.getItem('currentDB')
+        await deleteDB(dbName)
+        if(currentDB) getDbList(currentDB)
         else location.reload()
     }
 </script>
 
 
 <div class="db__item">
-    <h2 class="db__item-name">{dbName}</h2>
-    <p class="db__item-title text-sm text-font">{dbTitle}</p>
+    <div class="db__item-info">
+        <h2 class="db__item-name">Таблица: {dbName}</h2>
+        <h3 class="db__item-name">Количество записей: {dbCount}</h3>
+    </div>
+
+    <h3 class="db__item-name">Структура: {dbColumns.join(", ")}</h3>
+
+    <p class="db__item-title text-lg text-font">Описание: {dbTitle}</p>
     <div class="db__item-buttons">
         <Button text="Перейти к таблице" classStr='db__item-button' on:click={()=>{
-            sessionStorage.setItem("targetTable",dbIdName)
+            sessionStorage.setItem("targetTable",dbName)
             goto("/table")
         }}/>
         <Button text="Скачать в XLSX" classStr='db__item-button' on:click={async ()=>{
-            const res = downLoadTable(fullDBName)
+            const currentDB = localStorage.getItem("currentDB")
+            if(currentDB) downLoadTable(currentDB,dbName)
         }}/>
         <Button text="Удалить" classStr='db__item-button' on:click={()=>deleteModal =true}/>
     </div>

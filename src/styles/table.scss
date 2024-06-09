@@ -1,8 +1,8 @@
 .table{
-    height: 100px;
     width: 100%;
     padding: 30px;
     box-sizing: border-box;
+    overflow: hidden;
     &__title{
         display: flex;
         justify-content: space-between;

@@ -28,7 +28,7 @@ select{
     padding: 0 10px;
     border: none;
     border-radius: 10px;
-    background-color: var(--body-background-color);
+    background-color: var(--click-elem-bg);
     -webkit-box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);
     -moz-box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);
     box-shadow: 0px 0px 33px -4px rgba(0, 0, 0, 0.75);

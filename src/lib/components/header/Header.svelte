@@ -10,20 +10,27 @@
 
     function out(){
         localStorage.setItem("user","")
+        localStorage.setItem("currentDB","")
+
         location.reload()
     }
 
 </script>
 <div class="header">
     <div class="header__wrapper">
-        <button class="header__logo">
+        <!-- <button class="header__logo">
             <UserIcon class={"header__icon"}/>
-        </button>
-        <button class="header__button" on:click={()=>{goto("/")}}>
+        </button> -->
+        <button class="header__button text-lg" on:click={()=>{goto("/")}}>
             <DbIcon class={"header__icon"}/>
+            <h3> Главная</h3>
         </button>
-        <button on:click={out} class="header__button header__out">
+        <!-- {#each  as }
+            
+        {/each} -->
+        <button on:click={out} class="header__button text-lg header__out">
             <Out class={"header__icon"}/>
+            <h3> Выход</h3>
         </button>
     </div>
 </div>

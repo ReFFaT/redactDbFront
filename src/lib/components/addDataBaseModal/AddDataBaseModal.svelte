@@ -39,11 +39,11 @@
     </div>
     <div class="add-db__button">
         <Button bind:disabled={disabled} on:click={async ()=>{
-            const user = localStorage.getItem('user')
-            if(user) {
+            const currentDB = localStorage.getItem('currentDB')
+            if(currentDB) {
                 await createDB(db)
-                getDbList(user)
-                getTableList(user)
+                getDbList(currentDB)
+                // getTableList(user)
                 closeFunction()
             }
         }} text= "Создать"/>
