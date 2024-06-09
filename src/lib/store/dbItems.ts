@@ -10,7 +10,7 @@ export async function getUserInfo(){
         if(!user) return
 
 
-        const request = await fetch(`http://127.0.0.1:5000/user/${user}`, {
+        const request = await fetch(`http://reffattest.ru:5000/user/${user}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

@@ -23,7 +23,7 @@ export async function getTableList(tableName:string){
         // if(!currentDB) location.reload()
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/table_data/${currentDB}/${tableName}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/table_data/${currentDB}/${tableName}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
@@ -42,7 +42,7 @@ export async function getTableList(tableName:string){
 //     try{
 //         const currentDB = localStorage.getItem('currentDB')
 //         if(!currentDB) location.reload()
-//         const request  = await fetch(`http://127.0.0.1:5000/table_data/${currentDB}/${tableName}`,{
+//         const request  = await fetch(`http://reffattest.ru:5000/table_data/${currentDB}/${tableName}`,{
 //             method:"GET",
 //             headers: {
 //                 "Content-Type": "application/json",

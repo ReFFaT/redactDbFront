@@ -13,7 +13,7 @@ export interface newUserInterface {
 
 export async function auth(login:string,password:string) {
     try{
-        const request  = await fetch("http://127.0.0.1:5000/login",{
+        const request  = await fetch("http://reffattest.ru:5000/login",{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +39,7 @@ export async function auth(login:string,password:string) {
 export async function createUser(newUser: newUserInterface){
     if(newUser.repeatPass !== newUser.pass) return
     try{
-        const request  = await fetch("http://127.0.0.1:5000/users",{
+        const request  = await fetch("http://reffattest.ru:5000/users",{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export async function createDB(db:createDbInterface) {
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch("http://127.0.0.1:5000/user_tables",{
+        const request  = await fetch("http://reffattest.ru:5000/user_tables",{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export async function deleteDB(tableName:string) {
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/tables/${currentDB}/${tableName}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/tables/${currentDB}/${tableName}`,{
             method:"DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -119,7 +119,7 @@ export async function deleteTableRow(tableName:string, id:number | string){
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/delete_data`,{
+        const request  = await fetch(`http://reffattest.ru:5000/delete_data`,{
             method:"DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -146,7 +146,7 @@ export async function addTableItem(tableName:string, data:object){
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/add_data`,{
+        const request  = await fetch(`http://reffattest.ru:5000/add_data`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -174,7 +174,7 @@ export async function deleteTableColumn(tableName:string, columnName: string){
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/drop_column/${currentDB}/${tableName}/${columnName.split("_")[0]}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/drop_column/${currentDB}/${tableName}/${columnName.split("_")[0]}`,{
             method:"DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -201,7 +201,7 @@ export async function addTableColumn(tableName:string, columnName: addColumnInte
         // if(!currentDB)return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/add_columns`,{
+        const request  = await fetch(`http://reffattest.ru:5000/add_columns`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -234,7 +234,7 @@ export async function editTableRow(tableName:string, rowValue:{[key:string]:stri
             id:id,
             new_data:rowValue
         }
-        const request  = await fetch(`http://127.0.0.1:5000/update_data`,{
+        const request  = await fetch(`http://reffattest.ru:5000/update_data`,{
             method:"PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -257,7 +257,7 @@ export async function searchTable(tableName:string,searchRow:{value:string,field
         // if(!currentDB) return[]
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/search-table`,{
+        const request  = await fetch(`http://reffattest.ru:5000/search-table`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -300,7 +300,7 @@ export async function searchFilter(filterValue:filterValueInterface):Promise<{[k
         if(!currentDB) goto("/")
 
         if(currentDB) filterValue.db_name = currentDB
-        const request  = await fetch(`http://127.0.0.1:5000/filter`,{
+        const request  = await fetch(`http://reffattest.ru:5000/filter`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -325,7 +325,7 @@ export async function renameColumnFetch(tableName:string,oldColumn:string,newCol
         // if(!currentDB) return
         if(!currentDB) goto("/")
 
-        const request  = await fetch(`http://127.0.0.1:5000/rename_column`,{
+        const request  = await fetch(`http://reffattest.ru:5000/rename_column`,{
             method:"PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -349,7 +349,7 @@ export async function renameColumnFetch(tableName:string,oldColumn:string,newCol
 
 export async function downLoadTable(db_name:string, tableName:string){
     try{
-        const response = await fetch('http://127.0.0.1:5000/export', {
+        const response = await fetch('http://reffattest.ru:5000/export', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -382,7 +382,7 @@ export async function createNewDB(newDb:string){
     try{
         const user = localStorage.getItem('user')
         if(!user) location.reload()
-        const request  = await fetch(`http://127.0.0.1:5000/create_db`,{
+        const request  = await fetch(`http://reffattest.ru:5000/create_db`,{
             method:"POST",
             headers: {
                 "Content-Type": "application/json",
@@ -407,7 +407,7 @@ export async function deleteDbFetch(dBName:string){
     try{
         const user = localStorage.getItem('user')
         if(!user) location.reload()
-        const request  = await fetch(`http://127.0.0.1:5000/delete_db/${user}/${dBName}`,{
+        const request  = await fetch(`http://reffattest.ru:5000/delete_db/${user}/${dBName}`,{
             method:"DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -425,7 +425,7 @@ export async function deleteDbFetch(dBName:string){
 
 
 export async function downloadFile(db_name:string) {
-    fetch(`http://localhost:5000/download/${db_name}`)
+    fetch(`http://reffattest.ru:5000/download/${db_name}`)
     .then(response => response.blob())
     .then(blob => {
         const url = URL.createObjectURL(blob);
