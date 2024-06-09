@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation';
 import { writable } from 'svelte/store';
 
 
@@ -19,7 +20,9 @@ export const table = writable<tableItem | null>(null);
 export async function getTableList(tableName:string){
     try{
         const currentDB = localStorage.getItem('currentDB')
-        if(!currentDB) location.reload()
+        // if(!currentDB) location.reload()
+        if(!currentDB) goto("/")
+
         const request  = await fetch(`http://127.0.0.1:5000/table_data/${currentDB}/${tableName}`,{
             method:"GET",
             headers: {

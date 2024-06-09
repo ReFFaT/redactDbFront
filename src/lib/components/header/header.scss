@@ -45,6 +45,31 @@
         &:active{
             transform: scale(.9);
         }
+        &-text{
+            width: 100%;
+            text-wrap: nowrap;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        &-add{
+            width: 100%;
+            height: 50px;
+            border-radius:20px;
+            background-color:  transparent;
+            cursor: pointer;
+            border: 1px dashed var(--color-text);
+            transition: all .3s;
+        }
+        &-add:active{
+            transform: scale(.9);
+        }
+        &-add-img{
+            width: 30px;
+            height: 30px;
+            margin: 0 auto;
+            color: var(--color-text);
+            fill:  var(--color-text);
+        }
     }
     &__logo{
         background-color: transparent;

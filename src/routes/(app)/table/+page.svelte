@@ -16,7 +16,7 @@
 	import Modal from '$lib/components/Modal/Modal.svelte';
 	import { formatName, formatColumn,type addColumnInterface} from '$lib/helper/helper';
 	import { type tableItem , table } from '$lib/store/table';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
     import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem,searchTable,renameColumnFetch} from "$lib/helper/fetcher"
     import { getTableList } from '$lib/store/table';
     
@@ -171,7 +171,9 @@
         if(targetTableName) getTableList(targetTableName) 
         else goto("/")
     })
-
+    onDestroy(()=>{
+        targetTable = null
+    })
     $:targetTableName && $table && setTargetTable()
     $:searchRow && changeSearchButton()
 </script>

@@ -10,9 +10,9 @@
 
     onMount(()=>{
         const userId = localStorage.getItem("user")
-        const currentDB = localStorage.getItem("currentDB")
+        // const currentDB = localStorage.getItem("currentDB")
 
-        if(userId && currentDB) goto("/")
+        if(userId) goto("/")
     })
 </script>
 

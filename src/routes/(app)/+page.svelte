@@ -1,4 +1,6 @@
 <script lang="ts">
+	import {getUserInfo} from "$lib/store/dbItems"
+	import Button from '$lib/components/Button.svelte';
      // @ts-ignore
 	import AddIcon from "$lib/icons/add-icon.svg?component";
 
@@ -9,34 +11,79 @@
 	import { dbList, getDbList } from '$lib/store/dbList';
 	import { onMount } from "svelte";
 	import { goto } from "$app/navigation";
+	import { dbItems } from "$lib/store/dbItems";
+	import DeleteDb from '$lib/components/deleteDB/DeleteDB.svelte';
+    import {deleteDbFetch, downloadFile} from "$lib/helper/fetcher"
+    
     let addNewDB = false
+    let thisDB = ''
+    let isDeleteModal = false
+    function closeDeleteModal(){
+        isDeleteModal = false
+    }
+
+    function setNewName(){
+        const currentDB = localStorage.getItem("currentDB")
+        $dbItems.forEach((el)=>{
+            if(el===currentDB) {
+                thisDB = el
+            }
+        })
+    }
+    async function deleteDb (){
+        await deleteDbFetch(thisDB)
+        await getUserInfo()
+        thisDB = ""
+        localStorage.setItem("currentDB","")
+        closeDeleteModal()
+        dbList.set([])
+    }
     onMount(()=>{
         const currentDB = localStorage.getItem("currentDB")
-
-        if(!currentDB) goto("/login")
         if( currentDB){
+            thisDB = currentDB
             getDbList(currentDB)
         }
     })
+    $:$dbList && setNewName()
 </script>
 
-    <div class="database">
-        <h1>Мои таблицы</h1>
-        <ul class="database__list">
-            <li class="database__list-item">
-                <div class="item-db-add">
-                    <button class="item-db-add__button" title="Создать таблицу" on:click={()=>addNewDB = true}>
-                        <AddIcon class="item-db-add__icon"/>
-                    </button>
+<div class="database">
+    {#if thisDB}
+            <div class="database__title">
+                <h1>Мои таблицы в базе {thisDB}</h1>
+                <div class="database__title-buttons">
+                    <Button text="Скачать БД" classStr='db__item-button' on:click={()=>downloadFile(thisDB)}/>
+                    <Button text="Удалить" classStr='db__item-button' on:click={()=>isDeleteModal =true}/>
                 </div>
-            </li>
-            {#each $dbList as db}
-                <li class="database__list-item" in:scale={{duration:300}}>
-                    <DBItem dbColumns={db.columns} dbName={db.tables} dbCount={db.record_count} dbTitle={db.description}/>
+             
+
+            </div>
+            <ul class="database__list">
+                <li class="database__list-item">
+                    <div class="item-db-add">
+                        <button class="item-db-add__button" title="Создать таблицу" on:click={()=>addNewDB = true}>
+                            <AddIcon class="item-db-add__icon"/>
+                        </button>
+                    </div>
                 </li>
-            {/each}
-        </ul>
-    </div>
+                {#each $dbList as db}
+                    <li class="database__list-item" in:scale={{duration:300}}>
+                        <DBItem dbColumns={db.columns} dbName={db.tables} dbCount={db.record_count} dbTitle={db.description}/>
+                    </li>
+                {/each}
+            </ul> 
+    {:else}
+        <h1>Выберите или создайте БД</h1>
+    {/if}
+</div>
+
+
+{#if isDeleteModal}
+    <Modal>
+        <DeleteDb closeModal={closeDeleteModal} on:click={deleteDb}/>
+    </Modal>
+{/if}
 {#if addNewDB}
     <Modal closeFunction={()=>addNewDB=false}>
         <AddDataBaseModal closeFunction={()=>addNewDB=false}/>
@@ -56,6 +103,17 @@
             margin: 0;
             padding: 0;
             margin-top: 30px;
+        }
+        &__title{
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            gap: 30px;
+            &-buttons{
+                display: flex;
+                gap: 20px;
+            }
         }
     }
     :global(.item-db-add__icon){
