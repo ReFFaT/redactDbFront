@@ -6,7 +6,7 @@
 
     export let openFilter = false
     export let targetTableName:string | null = null
-    export let fields:string[] = []
+    export let fields:string[]| null = []
     export let targetTable:tableItem | null = null
 
     let fieldsList: string[][] = []
@@ -17,22 +17,25 @@
     }
 
     function setFieldsList(){
-        if(fields.length === filterValue.filters.length) return
-        else filterValue.filters = []
-
-        if(targetTableName) filterValue.table = targetTableName
-        fieldsList = fields.map(el=>el.split("_"))
-        fieldsList.forEach(el=>{
-            if(el[1]==="INTEGER"||el[1] === "REAL") filterValue.filters.push({
-                column:el[0],
-                from:"",
-                to:""
+        if(fields){
+            // if(fields.length === filterValue.filters.length) return
+            // else filterValue.filters = []
+            filterValue.filters = []
+            fieldsList = []
+            if(targetTableName) filterValue.table = targetTableName
+            fieldsList = fields.map(el=>el.split("_"))
+            fieldsList.forEach(el=>{
+                if(el[1]==="INTEGER"||el[1] === "REAL") filterValue.filters.push({
+                    column:el[0],
+                    from:"",
+                    to:""
+                })
+                else filterValue.filters.push({
+                    column:el[0],
+                    value:""
+                })
             })
-            else filterValue.filters.push({
-                column:el[0],
-                value:""
-            })
-        })
+        }
     } 
     async function getFilterTable() {
         if(targetTable?.data){
@@ -43,7 +46,7 @@
         }
     }
 
-    $:fields.length && setFieldsList()
+    $:fields && fields.length && setFieldsList()
 </script>
 
 

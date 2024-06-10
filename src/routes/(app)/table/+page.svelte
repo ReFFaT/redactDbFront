@@ -172,7 +172,7 @@
         else goto("/")
     })
     onDestroy(()=>{
-        targetTable = null
+        table.set(null)
     })
     $:targetTableName && $table && setTargetTable()
     $:searchRow && changeSearchButton()
@@ -180,32 +180,37 @@
 
 
 <div class="table">
-    <div class="table__title">
-        <h1>Таблица {targetTableName}</h1>
-        <div class="table__title-search">
-            <div class="table__title-search-select">
-                <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+    {#if $table}
+        <div class="table__title" in:scale={{duration:300}}>
+            <h1>Таблица {targetTableName}</h1>
+            <div class="table__title-search">
+                <div class="table__title-search-select">
+                    <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+                </div>
+                <div class="table__title-search-input">
+                    <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
+                </div>
+                <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
+                <div class="table__title-buttons">
+                    <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
+                    <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
+                    <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
+                    <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
+                        sessionStorage.setItem("targetTable","")
+                        goto('/')}}
+                    />
+                </div>
             </div>
-            <div class="table__title-search-input">
-                <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
-            </div>
-            <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
             <div class="table__title-buttons">
-                <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
-                <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
-                <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
-                <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
-                    sessionStorage.setItem("targetTable","")
-                    goto('/')}}
-                />
+                
             </div>
         </div>
-        <div class="table__title-buttons">
-            
-        </div>
-    </div>
-    {#if targetTable}
-        <div class="table__overflow">
+    {:else}
+    <h1>Идет загрузка...</h1>
+    {/if}
+   
+    {#if targetTable && $table}
+        <div class="table__overflow"  in:scale={{duration:300}}>
             <div class="table__overflow-hidden">
                 <table class="table__wrapper">
                     <thead>
@@ -316,7 +321,7 @@
 {/if}
 {#if showDeleteColumn}
     <Modal>
-        <DeleteRowModal title='Вы точно хотите удалить эту колонку?' closeModal = {()=>{
+        <DeleteRowModal title='Вы точно хотите удалить этот столбец?' closeModal = {()=>{
             deleteColumnName = 'false'
             showDeleteColumn = false
         }} deleteFunc = {deleteColumn}/>
