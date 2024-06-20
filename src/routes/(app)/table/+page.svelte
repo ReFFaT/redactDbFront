@@ -183,14 +183,16 @@
     {#if $table}
         <div class="table__title" in:scale={{duration:300}}>
             <h1>Таблица {targetTableName}</h1>
-            <div class="table__title-search">
-                <div class="table__title-search-select">
-                    <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+            <div class="table__content-wrapper">
+                <div class="table__title-search">
+                    <div class="table__title-search-select">
+                        <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+                    </div>
+                    <div class="table__title-search-input">
+                        <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
+                    </div>
+                    <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
                 </div>
-                <div class="table__title-search-input">
-                    <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
-                </div>
-                <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
                 <div class="table__title-buttons">
                     <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
                     <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
@@ -200,9 +202,6 @@
                         goto('/')}}
                     />
                 </div>
-            </div>
-            <div class="table__title-buttons">
-                
             </div>
         </div>
     {:else}

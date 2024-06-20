@@ -23,6 +23,7 @@ select{
     cursor: pointer;
     height: 44px;
     min-height: 44px;
+    min-width: 100px;
     outline: none;
     width: 100%;
     padding: 0 10px;

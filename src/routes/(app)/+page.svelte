@@ -54,7 +54,7 @@
                 <h1>Мои таблицы в базе {thisDB}</h1>
                 <div class="database__title-buttons">
                     <Button text="Скачать БД" classStr='db__item-button' on:click={()=>downloadFile(thisDB)}/>
-                    <Button text="Удалить" classStr='db__item-button' on:click={()=>isDeleteModal =true}/>
+                    <Button text="Удалить БД" classStr='db__item-button' on:click={()=>isDeleteModal =true}/>
                 </div>
              
 
@@ -62,8 +62,9 @@
             <ul class="database__list">
                 <li class="database__list-item">
                     <div class="item-db-add">
-                        <button class="item-db-add__button" title="Создать таблицу" on:click={()=>addNewDB = true}>
-                            <AddIcon class="item-db-add__icon"/>
+                        <button class="item-db-add__button text-font text-lg" title="Создать таблицу" on:click={()=>addNewDB = true}>
+                            <h2>Создать таблицу</h2>
+                            <AddIcon class="item-db-add__icon icon"/>
                         </button>
                     </div>
                 </li>
@@ -96,8 +97,9 @@
         width: 100%;
         background-color: var(--body-background-color);
         &__list{
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat( auto-fit, minmax(630px, 1fr) );
+            // flex-direction: column;
             gap: 30px;
             list-style: none;
             margin: 0;
@@ -117,14 +119,13 @@
         }
     }
     :global(.item-db-add__icon){
-        width: 40px;
-        height: 40px;
         fill: var(--color-text);
     }
     .item-db-add{
         box-sizing: border-box;
         width: 100%;
-        height: 150px;
+        min-height: 150px;
+        height: 100%;
         border-radius: 30px;
         border: 3px solid var(--content-bg);
         border-style: dashed;
@@ -132,8 +133,12 @@
         align-items: center;
         justify-content: center;
         &__button{
-            width: 60px;
+            width: min-content;
             height: 60px;
+            align-items: center;
+            gap: 10px;
+            text-wrap: nowrap;
+            display: flex;
             background-color: transparent;
             border: 1px solid transparent; 
             cursor: pointer;
@@ -141,6 +146,19 @@
             &:active{
                 transform: scale(.9);
             }
+        }
+    }
+    @media screen and (max-width:750px){
+        .database{
+            padding: 0 5px;
+        }
+        .database__list{
+            grid-template-columns: repeat( auto-fit, minmax(200px, 1fr) );
+            gap: 10px;
+        }
+        .database__title{
+            flex-direction: column;
+            margin-top: 10px;
         }
     }
 </style>

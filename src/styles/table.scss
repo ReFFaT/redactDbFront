@@ -22,8 +22,6 @@
         &-buttons{
             display: flex;
             gap: 10px;
-            margin-left: auto;
-            padding-left: 30px;
         }
         &-button{
             text-wrap: nowrap;
@@ -135,7 +133,7 @@
     box-shadow: 6px 3px 30px 0px var(--shadow-color);
     border-radius: 20px;
     margin: 0 auto;
-    width: calc(100vw - 150px);
+    width: calc(100% - 10px);
     overflow: hidden;
     scrollbar-width: thin;
 
@@ -148,4 +146,22 @@
     scrollbar-width: thin;
     overflow-y: hidden;
     overflow-x: auto;
+}
+.table__content-wrapper{
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+@media screen and (max-width:1350px) {
+    .table__content-wrapper{
+        flex-direction: column;
+        gap: 20px;
+    }
+    .table__title-buttons{
+        flex-wrap: wrap;
+    }
+    .table__title-button{
+        width: 100%;
+    }
 }

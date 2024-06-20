@@ -54,6 +54,7 @@
 		margin-bottom: 5px;
 	}
 	.input {
+		min-width: 100px;
 		width: 100%;
 		height: 40px;
 		position: relative;

@@ -84,7 +84,7 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         box-sizing: border-box;
         z-index: 10;
         pointer-events: none;
@@ -124,7 +124,7 @@
             display: flex;
             flex-direction: column;
             width: 500px;
-            height: 100vh;
+            height: 100%;
             box-sizing: border-box;
             position: absolute;
             background-color: var(--body-background-color);

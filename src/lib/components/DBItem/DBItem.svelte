@@ -25,11 +25,11 @@
 
 <div class="db__item">
     <div class="db__item-info">
-        <h2 class="db__item-name">Таблица: {dbName}</h2>
-        <h3 class="db__item-name">Количество записей: {dbCount}</h3>
+        <p class="text-font text-h3 db__item-name">Таблица: {dbName}</p>
+        <p class="text-font text-h3 db__item-name">Количество записей: {dbCount}</p>
     </div>
 
-    <h3 class="db__item-name">Структура: {dbColumns.join(", ")}</h3>
+    <p class="text-lg text-font db__item-name">Структура: {dbColumns.join(", ")}</p>
 
     <p class="db__item-title text-lg text-font">Описание: {dbTitle}</p>
     <div class="db__item-buttons">
@@ -41,7 +41,7 @@
             const currentDB = localStorage.getItem("currentDB")
             if(currentDB) downLoadTable(currentDB,dbName)
         }}/>
-        <Button text="Удалить" classStr='db__item-button' on:click={()=>deleteModal =true}/>
+        <Button text="Удалить таблицу" classStr='db__item-button' on:click={()=>deleteModal =true}/>
     </div>
 </div>
 
