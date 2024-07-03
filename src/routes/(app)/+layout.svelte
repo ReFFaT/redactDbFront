@@ -1,21 +1,20 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import Header from '$lib/components/header/Header.svelte';
-	import { getDbList } from '$lib/store/dbList';
-	import { getTableList } from '$lib/store/table';
-	import { onMount } from 'svelte';  
-
-    async function auth(){
-        
-    }
-
+	import { onMount } from 'svelte'; 
+    import {getUserInfo} from "$lib/store/dbItems"
+    
     onMount(()=>{
         const userId = localStorage.getItem("user")
+        const currentDB = localStorage.getItem("currentDB")
+        // if(!userId || !currentDB) goto("/login")
         if(!userId) goto("/login")
-        if(userId){
-            getDbList(userId)
-            getTableList(userId)
-        }
+
+        getUserInfo()
+
+        // if(userId && currentDB){
+        //     getDbList(currentDB)
+        // }
     })
 </script>
 <div class="wrapper">

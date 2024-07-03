@@ -1,4 +1,5 @@
 <script lang="ts">
+	import RenameColumn from './../../../lib/components/renameColumn/RenameColumn.svelte';
     // @ts-ignore
     import AddIcon from "$lib/icons/add-icon.svg?component";
     // @ts-ignore
@@ -15,8 +16,8 @@
 	import Modal from '$lib/components/Modal/Modal.svelte';
 	import { formatName, formatColumn,type addColumnInterface} from '$lib/helper/helper';
 	import { type tableItem , table } from '$lib/store/table';
-	import { onMount } from 'svelte';
-    import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem,searchTable} from "$lib/helper/fetcher"
+	import { onDestroy, onMount } from 'svelte';
+    import {deleteTableRow,deleteTableColumn,addTableColumn,editTableRow, addTableItem,searchTable,renameColumnFetch} from "$lib/helper/fetcher"
     import { getTableList } from '$lib/store/table';
     
     import "$styles/table.scss"
@@ -46,6 +47,10 @@
     let editRowValues:{[key:string]:string} = {}
 
 
+    let isRenameColumn = false
+    let renameColumnVal = ''
+    let newColumnValue = ""
+
     let searchRow = {
         field:"",
         value:""
@@ -68,22 +73,21 @@
 
 
     function setTargetTable(){
-        if($table && targetTableName && $table[targetTableName]) {
-            targetTable = JSON.parse(JSON.stringify($table[targetTableName]))
+        if($table && targetTableName) {
+            targetTable = JSON.parse(JSON.stringify($table))
         }
     }
 
     async function addRow (){
         const newRowValues:{[key:string]:string} = {}
-        const userId = localStorage.getItem("user")
 
         for(let i in newRowItems){
             newRowValues[i.split("_")[0]] = newRowItems[i]
         }
         
-        if(targetTableName && userId) {
+        if(targetTableName) {
             await addTableItem(targetTableName,newRowValues)
-            await getTableList(userId?? '')
+            await getTableList(targetTableName)
         }
         resetSearch()
         showAddNewRow = false
@@ -91,27 +95,27 @@
     }
 
     async function deleteRow() {
-        if(targetTableName && userId) {
+        if(targetTableName) {
             await deleteTableRow(targetTableName,deleteRowIndex)
-            await getTableList(userId)    
+            await getTableList(targetTableName)    
         }
         resetSearch()
         showDeleteRowModal = false
     }
 
     async function deleteColumn() {
-        if(targetTableName && userId) {
+        if(targetTableName) {
             await deleteTableColumn(targetTableName,deleteColumnName)
-            await getTableList(userId)    
+            await getTableList(targetTableName)    
         }
         resetSearch()
         showDeleteColumn = false
     }
 
     async function addColumn() {
-        if(targetTableName && userId) {
+        if(targetTableName) {
             await addTableColumn(targetTableName,addColumnArr)
-            await getTableList(userId)    
+            await getTableList(targetTableName)    
         }
         resetSearch()
         showAddColumn = false
@@ -124,9 +128,9 @@
             newRowValues[i.split("_")[0]] = editRowValues[i]
         }
 
-        if(targetTableName && userId) {
+        if(targetTableName) {
             await editTableRow(targetTableName,newRowValues)
-            await getTableList(userId)    
+            await getTableList(targetTableName)    
         }
         resetSearch()
         showEditRow = false
@@ -134,17 +138,28 @@
     }
 
     async function getSearch() {
-        if(targetTableName && userId && targetTable?.data) {
+
+        if(targetTableName && targetTable?.data) {
             targetTable.data = []
             const res = await searchTable(targetTableName,searchRow)
             targetTable.data = res
         }
     }
     async function reSearch() {
-        if(userId && targetTable?.data) {
+        if(targetTableName && targetTable?.data) {
             targetTable.data = []
-            await getTableList(userId)
+            await getTableList(targetTableName)
             resetSearch()
+        }
+        
+    }
+    async function renameColumn() {
+        if(targetTableName && targetTable?.data) {
+            await renameColumnFetch(targetTableName,renameColumnVal,newColumnValue)
+            renameColumnVal = ''
+            newColumnValue = ""
+            await getTableList(targetTableName)
+            isRenameColumn = false
         }
         
     }
@@ -153,41 +168,48 @@
         userId = localStorage.getItem("user")
         if(!userId) goto("/login")
         targetTableName = sessionStorage.getItem("targetTable")
-        if(!targetTableName) goto('/') 
+        if(targetTableName) getTableList(targetTableName) 
+        else goto("/")
     })
-
+    onDestroy(()=>{
+        table.set(null)
+    })
     $:targetTableName && $table && setTargetTable()
     $:searchRow && changeSearchButton()
 </script>
 
 
 <div class="table">
-    <div class="table__title">
-        <h1>Таблица {formatName(targetTableName?? "")}</h1>
-        <div class="table__title-search">
-            <div class="table__title-search-select">
-                <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
-            </div>
-            <div class="table__title-search-input">
-                <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
-            </div>
-            <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
-            <div class="table__title-buttons">
-                <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
-                <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
-                <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
-                <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
-                    sessionStorage.setItem("targetTable","")
-                    goto('/')}}
-                />
+    {#if $table}
+        <div class="table__title" in:scale={{duration:300}}>
+            <h1>Таблица {targetTableName}</h1>
+            <div class="table__content-wrapper">
+                <div class="table__title-search">
+                    <div class="table__title-search-select">
+                        <Select bind:value={searchRow.field} placeholder="Выберите столбец" items={targetTable?.fields.map(el=>{return {value:el.split("_")[0],description:""}})}/>
+                    </div>
+                    <div class="table__title-search-input">
+                        <Input placeHolder='Введите значение' bind:value={searchRow.value}/>
+                    </div>
+                    <Button disabled={isSearchButton} text="Поиск" classStr="table__title-button" on:click={()=>getSearch()}/>
+                </div>
+                <div class="table__title-buttons">
+                    <Button text="Сбросить" classStr="table__title-button" on:click={()=>reSearch()}/>
+                    <Button text="Фильтр" classStr="table__title-button" on:click={()=>openFilter = true}/>
+                    <Button text="Добавить запись" classStr="table__title-button" on:click={()=>showAddNewRow = true}/>
+                    <Button text="Вернуться" classStr="table__title-button" on:click={()=>{
+                        sessionStorage.setItem("targetTable","")
+                        goto('/')}}
+                    />
+                </div>
             </div>
         </div>
-        <div class="table__title-buttons">
-            
-        </div>
-    </div>
-    {#if targetTable}
-        <div class="table__overflow">
+    {:else}
+    <h1>Идет загрузка...</h1>
+    {/if}
+   
+    {#if targetTable && $table}
+        <div class="table__overflow"  in:scale={{duration:300}}>
             <div class="table__overflow-hidden">
                 <table class="table__wrapper">
                     <thead>
@@ -207,6 +229,19 @@
                                     <div class="table__row-head">
                                         {formatColumn(field)}
                                         {#if field !== 'id_INTEGER'}
+                                            <!-- <button class="table__row-head-button" title="Удалить столбец" on:click={()=>{
+                                                deleteColumnName = field
+                                                showDeleteColumn = true
+                                            }}>
+                                                <DeleteIcon class= "table__row-button-delete"/>
+                                            </button> -->
+                                            <!-- TO:DO efaffeafeafaefaefeaaeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee -->
+                                            <button title="Переименовать столбец" on:click={()=>{
+                                                isRenameColumn = true
+                                                renameColumnVal = field.split("_")[0]
+                                                }} class="table__row-head-button text-font text-sm">
+                                                <Pencil class= "table__row-button-delete"/>
+                                            </button>
                                             <button class="table__row-head-button" title="Удалить столбец" on:click={()=>{
                                                 deleteColumnName = field
                                                 showDeleteColumn = true
@@ -253,6 +288,16 @@
     {/if}
 </div>
 
+{#if isRenameColumn}
+    <Modal>
+        <RenameColumn 
+            bind:placeholder = {renameColumnVal}
+            bind:newColumnValue={newColumnValue}
+            closeFunc={()=>isRenameColumn = false}
+            on:click={renameColumn}
+        />
+    </Modal>
+{/if}
 
 {#if showEditRow}
     <Modal>
@@ -275,7 +320,7 @@
 {/if}
 {#if showDeleteColumn}
     <Modal>
-        <DeleteRowModal title='Вы точно хотите удалить эту колонку?' closeModal = {()=>{
+        <DeleteRowModal title='Вы точно хотите удалить этот столбец?' closeModal = {()=>{
             deleteColumnName = 'false'
             showDeleteColumn = false
         }} deleteFunc = {deleteColumn}/>

@@ -4,7 +4,7 @@
     export let classStr = ''
 </script>
 
-<button on:click  disabled={disabled} class="button text-font {classStr}">
+<button on:click  disabled={disabled} class="button text-font text-sm {classStr}">
     {text}
 </button>
 

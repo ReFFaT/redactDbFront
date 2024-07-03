@@ -2,10 +2,10 @@ import { writable } from 'svelte/store';
 
 interface bdListInterface{
         id: number;
-        table_columns: string;
-        table_description: string;
-        user: string;
-        user_table: string;
+        record_count: number
+        columns: string[];
+        description: string;
+        tables: string;
 }
 
 

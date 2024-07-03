@@ -1,6 +1,10 @@
 .header{
     width: 50px;
-    min-height: 100vh;
+    height: 100%;
+    transition: all .3s;
+    &.open{
+        width: 230px;
+    }
     &__wrapper{
         display: flex;
         box-sizing: border-box;
@@ -10,40 +14,135 @@
         position: fixed;
         z-index: 1;
         flex-direction: column;
-        min-height: 100vh;
         height: 100%;
         background-color: var(--body-background-color);
         -webkit-box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
         -moz-box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
         box-shadow: 6px 3px 30px 0px rgba(0,0,0,0.75);
+        transition: all .3s;
+        &.open{
+            width: 200px;
+        }
     }
     &__button{
         border: none;
-        justify-content: center;
         display: flex;
         align-items: center;
         transition: all .3s;
         background-color: transparent;
-        padding: 10px 0;
+        overflow: hidden;
+        justify-content: space-between;
+        gap: 10px;
+        padding: 10px;
+        min-height: 40px;
+        position: relative;
+        opacity: .7;
+        right: 0;
         -webkit-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
         -moz-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
         box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
+        border: 1px solid rgba(0,0,0,0);
+        border-radius: 10px;
         cursor: pointer;
         &:active{
             transform: scale(.9);
+        }
+        &.active{
+            opacity: 1;
+            border: 1px solid var(--color-text);
+        }
+        &-text{
+            width: 100%;
+            text-wrap: nowrap;
+            overflow: hidden;
+            text-overflow:ellipsis;
+        }
+        &-add{
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            gap: 10px;
+            justify-content: space-between;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 100%;
+            padding: 10px;
+            border-radius:20px;
+            background-color:  transparent;
+            cursor: pointer;
+            border: 1px dashed var(--color-text);
+            transition: all .3s;
+        }
+        &-add:active{
+            transform: scale(.9);
+        }
+        &-add-img{
+            margin: 0;
+            color: var(--color-text);
+            fill:  var(--color-text);
         }
     }
     &__logo{
         background-color: transparent;
         border: none;
+        display: flex;
         padding: 10px 0;
+        white-space: nowrap;
+        align-items: center;
+        gap: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding:10px 10px 10px 10px;
+        min-height: 40px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        cursor: pointer;
+        border-radius:20px;
+        border: 1px dashed var(--color-text);
+        &-icon{
+            fill:  var(--color-text);
+            transition: all .3s;
+            &.rotate{
+                transform: rotate(-180deg);
+            }
+        }
     }
     &__icon{
-        width: 30px;
-        height: 30px;
         fill: var(--color-text);
     }
     &__out{
         margin-top: auto;
+    }
+}
+.db-header__list{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding: 10px 0;
+    -webkit-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
+        -moz-box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
+        box-shadow: 0px 0px 33px 0px rgba(0,0,0,0.75);
+}
+.db__title{
+    text-align: center;
+    height: 50px;
+}
+@media screen and (max-width:750px){
+    .header__wrapper{
+        width: 40px;
+        height: 100%;
+        min-height: unset;
+    }
+    .header{
+        height: 100%;
+        min-height: unset;
+        &.open{
+            width: 50px;
+        }
     }
 }

@@ -1,3 +1,4 @@
+import { goto } from '$app/navigation';
 import { writable } from 'svelte/store';
 
 
@@ -8,21 +9,25 @@ export interface tableItem{
     fields: string[]
 }
 
-interface tableInterface{
-    [key: string]:tableItem
-}
+// interface tableInterface{
+//     [key: string]:tableItem
+// }
 
 
-export const table = writable<tableInterface | null>(null);
+export const table = writable<tableItem | null>(null);
 
 
-export async function getTableList(user:string){
+export async function getTableList(tableName:string){
     try{
-        const request  = await fetch(`http://reffattest.ru:5000/user_tables_table/${user}`,{
+        const currentDB = localStorage.getItem('currentDB')
+        // if(!currentDB) location.reload()
+        if(!currentDB) goto("/")
+
+        const request  = await fetch(`http://reffattest.ru:5000/table_data/${currentDB}/${tableName}`,{
             method:"GET",
             headers: {
                 "Content-Type": "application/json",
-            },
+            }
         })
         const response = await request.json()
         if(!request.ok) throw new Error(response.error)
@@ -33,3 +38,21 @@ export async function getTableList(user:string){
         table.set(null)
     }
 }
+// export async function getTableData(tableName:string){
+//     try{
+//         const currentDB = localStorage.getItem('currentDB')
+//         if(!currentDB) location.reload()
+//         const request  = await fetch(`http://reffattest.ru:5000/table_data/${currentDB}/${tableName}`,{
+//             method:"GET",
+//             headers: {
+//                 "Content-Type": "application/json",
+//             }
+//         })
+//         const response = await request.json()
+//         if(!request.ok) throw new Error(response.error)
+//         return response
+//     }
+//     catch(err){
+//         console.error(err)
+//     } 
+// }

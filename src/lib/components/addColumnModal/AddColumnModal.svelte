@@ -45,7 +45,7 @@
 
 <div class="add-column">
     <CloseModal on:click={closeModal}/>
-    <h4>Добавление колонок</h4>
+    <h4>Добавление столбцов</h4>
     <div class="add-column__wrapper">
         {#each addColumnArr as column , index}
         <div class="add-column__input">
@@ -64,7 +64,7 @@
             >Удалить</button>
         </div>
             {/each}
-        <Button text="Добавить колонку" classStr='' on:click={()=>{
+        <Button text="Добавить столбец" classStr='' on:click={()=>{
             addColumnArr.push({col:"",type:""})
             addColumnArr = addColumnArr
         }}/>

@@ -10,6 +10,8 @@
 
     onMount(()=>{
         const userId = localStorage.getItem("user")
+        // const currentDB = localStorage.getItem("currentDB")
+
         if(userId) goto("/")
     })
 </script>
