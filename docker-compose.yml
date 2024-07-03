@@ -1,0 +1,19 @@
+services:
+  backend:
+    build: ./redact_db
+    ports:
+      - "5000:5000"
+
+  frontend:
+    build: ./redactDbFront
+    ports:
+      - "80:80"
+
+  # nginx:
+  #   image: nginx
+  #   volumes:
+  #     - /redactDbFront/nginx.conf:/etc/nginx/conf.d
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - frontend
